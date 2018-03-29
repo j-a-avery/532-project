@@ -1,6 +1,9 @@
 #include <vector>
 #include <atomic>
 
+#ifndef MERGE_SORT_MT
+#define MERGE_SORT_MT
+
 class MergeSortMt
 {
     public:
@@ -14,3 +17,5 @@ class MergeSortMt
         void merge( int, int, int, int );
         void display_sub_vector( int, int ) const;
 };
+
+#endif

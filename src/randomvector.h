@@ -2,6 +2,9 @@
 #include <random>
 #include <chrono>
 
+#ifndef RANDOM_INT_VECTOR
+#define RANDOM_INT_VECTOR
+
 class RandomIntVector
 {
 private:
@@ -16,3 +19,5 @@ public:
     RandomIntVector( int );
     std::vector<int> vector();
 };
+
+#endif

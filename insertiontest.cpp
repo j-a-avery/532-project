@@ -2,7 +2,7 @@
 #include <iostream>
 #include "./src/sortingvector.h"
 #include "./src/insertionsort.h"
-#include "./src/randomvector.cpp"
+#include "./src/randomvector.h"
 
 int main() {
     InsertionSort iv{10};
@@ -13,4 +13,5 @@ int main() {
 
     iv.sort();
     
+    return 0;
 }

@@ -2,6 +2,9 @@
 #include "randomvector.h"
 #include "sortingvector.h"
 
+#ifndef SORTING_VECTOR
+#define SORTING_VECTOR
+
 class InsertionSort : SortingVector
 {
     public:
@@ -11,3 +14,5 @@ class InsertionSort : SortingVector
     private:
         std::vector<int> data;
 };
+    
+#endif

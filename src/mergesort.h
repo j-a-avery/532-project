@@ -2,6 +2,9 @@
 #include "sortingvector.h"
 #include "randomvector.h"
 
+#ifndef MERGE_SORT
+#define MERGE_SORT
+
 class MergeSort : SortingVector
 {
     public:
@@ -13,3 +16,5 @@ class MergeSort : SortingVector
         void sort_sub_vector( int, int );
         void merge( int, int, int, int );
 };
+    
+#endif
