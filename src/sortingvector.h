@@ -6,12 +6,12 @@
 
 class SortingVector
 {
-    public:
-        SortingVector( int );
-        virtual std::vector<int> sort();
-        std::vector<int> contents() const;
-    private:
-        std::vector<int> data;
+public:
+    SortingVector( int );
+    virtual std::vector<int> sort();
+    std::vector<int> vector() const;
+private:
+    std::vector<int> data;
 };
     
 #endif

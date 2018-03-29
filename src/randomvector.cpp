@@ -34,7 +34,7 @@ std::vector<int> RandomIntVector::vector( void ) const
 }
 
 
-
+// cout the vector
 std::ostream& operator<<(std::ostream &out, const RandomIntVector &rv )
 {
     for ( int i = 0; i < rv.vector().size(); i++ )

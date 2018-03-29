@@ -6,15 +6,6 @@ SortingVector::SortingVector( int vector_size ) {
 }
 
 // Access a constant copy of the vector
-std::vector<int> SortingVector::contents() const {
+std::vector<int> SortingVector::vector() const {
     return data;
-}
-
-// cout the vector
-std::ostream &operator<<(std::ostream &out, const SortingVector &v )
-{
-    for ( auto element : v.contents )
-    {
-        out << element << ' ';
-    }
 }

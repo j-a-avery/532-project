@@ -1,4 +1,5 @@
 #include "randomvector.h"
+#include "sortingvector.h"
 #include <iostream>
 
 using namespace std;
@@ -12,7 +13,7 @@ int main() {
         cout << i << ": " << r.vector()[i] << ' ';
     }
     cout << endl;
-    
+
 
     return 0;
 }

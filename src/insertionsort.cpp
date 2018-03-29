@@ -1,7 +1,7 @@
 #include <iostream>
 #include <vector>
 #include "randomvector.h"
-#include "./insertionsort.h"
+#include "insertionsort.h"
 
 
 // Constructor
@@ -28,7 +28,7 @@ std::vector< int > InsertionSort::sort( void )
 // cout the vector
 std::ostream &operator<<(std::ostream &out, const InsertionSort &v )
 {
-    for ( auto element : v.contents )
+    for ( auto element : v.contents() )
     {
         out << element << ' ';
     }
