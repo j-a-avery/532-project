@@ -1,13 +1,16 @@
 #include <vector>
 #include <random>
-
-static std::random_device rd;
-static std::default_random_engine eng(rd());
-static std::uniform_int_distribution<> udist(0, 1024);
+#include <chrono>
 
 class RandomIntVector
 {
+private:
+    std::random_device rd{};
+    std::mt19937 mt{rd()};
+    std::uniform_int_distribution<int> dist{1, 1024};
+
     std::vector<int> data;
+    
 public:
     RandomIntVector();
     RandomIntVector( int );

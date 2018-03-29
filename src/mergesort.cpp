@@ -5,15 +5,15 @@
 
 
 // Constructor
-MergeSort::MergeSort( int vector_size ) {
-    data = RandomIntVector(vector_size).vector();
-}
-
+MergeSort::MergeSort( int vector_size ) 
+    : SortingVector ( vector_size ) {}
 
 //  Sort the vector
 std::vector< int > MergeSort::sort( void )
 {
     sort_sub_vector( 0, data.size()-1 );
+
+    return data;
 } // end MergeSort::sort
 
 
@@ -74,3 +74,11 @@ void MergeSort::merge( int left, int middle1, int middle2, int right )
 } // end function merge
 
 
+// cout the vector
+std::ostream &operator<<(std::ostream &out, const MergeSort &v )
+{
+    for ( auto element : v.contents )
+    {
+        out << element << ' ';
+    }
+}

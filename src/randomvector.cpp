@@ -16,7 +16,7 @@ RandomIntVector::RandomIntVector( int vect_size )
 
     for ( int i; i < data.size(); i++ )
     {
-        data[i] = udist(eng);
+        data[i] = dist(mt);
     }
 }
 
@@ -24,14 +24,14 @@ RandomIntVector::RandomIntVector( int vect_size )
 // Return the vector data
 std::vector<int> RandomIntVector::vector( void )
 {
-    return data;
+    return this->data;
 }
 
 
 // cout the vector
-std::ostream &operator<<(std::ostream &out, const RandomIntVector &rv )
+std::ostream &operator<<(std::ostream &out, RandomIntVector &rv )
 {
-    for ( auto element : rv.vector )
+    for ( auto element : rv.vector() )
     {
         out << element << ' ';
     }
