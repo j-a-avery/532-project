@@ -5,7 +5,8 @@
 // Default Constructor
 RandomIntVector::RandomIntVector( void )
 {
-    RandomIntVector(10);
+    data = std::vector<int>(10);
+    randomize();
 }
 
 
@@ -13,26 +14,33 @@ RandomIntVector::RandomIntVector( void )
 RandomIntVector::RandomIntVector( int vect_size )
 {
     data = std::vector<int>( vect_size );
+    randomize();
+}
 
-    for ( int i; i < data.size(); i++ )
-    {
+
+// Set vector items to random values
+void RandomIntVector::randomize( void )
+{
+    for (int i = 0; i < data.size(); i++ ) {
         data[i] = dist(mt);
     }
 }
 
 
 // Return the vector data
-std::vector<int> RandomIntVector::vector( void )
+std::vector<int> RandomIntVector::vector( void ) const
 {
     return this->data;
 }
 
 
-// cout the vector
-std::ostream &operator<<(std::ostream &out, RandomIntVector &rv )
+
+std::ostream& operator<<(std::ostream &out, const RandomIntVector &rv )
 {
-    for ( auto element : rv.vector() )
+    for ( int i = 0; i < rv.vector().size(); i++ )
     {
-        out << element << ' ';
+        out << rv.vector()[ i ] << ' ';
     }
+
+    return out;
 }

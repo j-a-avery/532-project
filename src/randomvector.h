@@ -17,7 +17,12 @@ private:
 public:
     RandomIntVector();
     RandomIntVector( int );
-    std::vector<int> vector();
+    std::vector<int> vector() const;
+    void randomize();
 };
+
+// cout the vector
+std::ostream& operator<<(std::ostream &, const RandomIntVector & );
+
 
 #endif

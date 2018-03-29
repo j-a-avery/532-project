@@ -1,7 +1,7 @@
 #include <iostream>
 #include <vector>
 #include "randomvector.h"
-#include "insertionsort.h"
+#include "./insertionsort.h"
 
 
 // Constructor
