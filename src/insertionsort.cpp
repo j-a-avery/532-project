@@ -11,25 +11,21 @@ InsertionSort::InsertionSort( int vector_size )
 //  Sort the vector
 std::vector< int > InsertionSort::sort( void )
 {
-    for ( int j = 1; j < data.size(); j++ ) {
-        int key = data[j];
+    for ( int j = 1; j < this->vector().size(); j++ ) {
+        int key = this->vector()[j];
         int i = j - 1;
 
-        while ( i > 0 && data[i] > key ) {
-            data[ i + 1 ] = data[ i ];
+        while ( i > 0 && this->vector()[i] > key ) {
+            this->vector()[ i + 1 ] = this->vector()[ i ];
             i -= 1;
         }
-        data[ i + 1 ] = key;
+        this->vector()[ i + 1 ] = key;
     }
 
-    return data;
+    return this->vector();
 } // end InsertionSort::sort
 
-// cout the vector
-std::ostream &operator<<(std::ostream &out, const InsertionSort &v )
+std::vector< int > InsertionSort::vector( void ) const
 {
-    for ( auto element : v.contents() )
-    {
-        out << element << ' ';
-    }
+    return this->vector();
 }
