@@ -3,14 +3,21 @@
 
 using namespace std;
 
+std::ostream &operator<<(std::ostream &out, const std::vector<int> &vec )
+{
+    for ( auto element : vec ) {
+        out << element << ' ';
+    }
+
+    return out;
+}
 
 int main() {
     InsertionSort is(13);
 
-    for ( int i; i < is.vector().size(); i++ )
-    {
-        cout << is.vector()[ i ] << endl;
-    }
+    vector<int> v = is.sort();
+
+    cout << v << endl;
 
     return 0;
 }
