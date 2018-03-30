@@ -74,6 +74,13 @@ void sort_sub_vector( std::vector< int > &, int, int );
 void merge( std::vector< int > &, int, int, int, int );
 
 
+// Sort a vector in place using a multithreaded merge sort
+void multithreaded_merge_sort( std::vector< int > & );
+// Multithreaded merge sort helper functions
+void multithreaded_sort_sub_vector( std::vector< int > &, int, int );
+//void multithreaded_merge( std::vector< int > &, int, int, int, int ); // Not necessary
+
+
 // Fill an int vector with random ints
 void random_fill( std::vector< int > & );
 
@@ -109,7 +116,7 @@ int main(int argc, char **argv) {
     // p determines both the array size and the number of tests per array
     // Arrays of size 2^p will be tested either floor(512/(p*p)) times or 32 times
     // Having a vector of ps will make things easier later
-    std::vector< int > ps { 4, 8, 12, 16 , 20  };
+    std::vector< int > ps { 4, 8, 12, 16/*  , 20 */  };
 
     // Determine the sizes of the test runs.
     // If false, then each vector of size 2^p will be tested floor(512/(p*p)) times
@@ -136,6 +143,9 @@ int main(int argc, char **argv) {
     };
     if ( run_merge_sort ) { 
         sorters.push_back( NamedFunction{ "Merge Sort", merge_sort } ); 
+    }
+    if ( run_multithreaded_merge_sort ) {
+        sorters.push_back( NamedFunction{ "Multithreaded Merge Sort", multithreaded_merge_sort } );
     }
 
     // The heart of the project
@@ -240,6 +250,7 @@ void merge( std::vector<int> &v, int left, int mid1, int mid2, int right ) {
         }
     }
 
+    // Put any leftover elements into the combined vector
     if ( left_index == mid2 ) { // if at the end of the left vector
         while ( right_index <= right ) {    // copy rest of right vector
             combined[ combined_index++ ] = v[ right_index++ ];
@@ -299,3 +310,34 @@ std::ostream& operator<< ( std::ostream &out, const std::vector< T > &v ) {
     std::copy( v.begin(), v.end(), std::ostream_iterator< T >( out, " ") );
     return out;
 } // end operator<<
+
+
+
+
+
+
+
+
+
+void multithreaded_merge_sort( std::vector< int > &v ) {
+    multithreaded_sort_sub_vector( v, 0, v.size() - 1 );
+}
+
+
+
+void multithreaded_sort_sub_vector( std::vector< int > &v, int low, int high ) {
+    // Test against base case where size of vector is 1
+    if ( ( high - low ) >= 1 ) {    // if NOT base case then
+
+        // Calculate midpoint of the vector,
+        //  and the next element to the right.
+        int mid1 = ( low + high ) / 2;
+        int mid2 = mid1 + 1;
+
+        std::thread left( multithreaded_sort_sub_vector, std::ref(v), low, mid1 );
+        multithreaded_sort_sub_vector( v, mid2, high );
+        left.join();
+
+        merge( v, low, mid1, mid2, high );
+    }
+}
