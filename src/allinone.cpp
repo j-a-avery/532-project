@@ -39,12 +39,14 @@
 ******************************************************************************/
 
 #include <iostream>
+#include <fstream>
 #include <vector>
 #include <random>
 #include <iterator>
 #include <chrono>
 #include <string>
 #include <functional>
+#include <algorithm>    // For remove_if when setting the save file name
 
 
 /* 
@@ -151,33 +153,44 @@ int main(int argc, char **argv) {
 
 
 
-// The actual meat of the project.
 // Given a NamedFunction (a pointer to a function and a string giving it a name),
 //  a boolean to determine whether or not to process equal batch sizes, and a vector
 //  of values for p, calculate the execution time for each of the sort algorithms.
 void test_sorter( NamedFunction &f, std::vector< int > ps, bool equal_batch_sizes, bool limit_n ) {
+    // Create a file to output the results
+    std::string file_name{ f.function_name };
+    file_name.erase( std::remove_if( file_name.begin(), file_name.end(), isspace ) );
+    std::transform( file_name.begin(), file_name.end(), file_name.begin(), tolower );
+    file_name += ".txt";
+
+    std::ofstream fout(file_name);
     
     std::cout << std::endl << f.function_name << std::endl;
 
-    int batch_size;
-
+    // Iterate through each of the p values (i.e. p = 4, 8, 12, ...)
     for ( auto p : ps) {
+
+        int batch_size;
         
-        // Batch size
-        if ( equal_batch_sizes ) {
+        // Set the batch size
+        if ( equal_batch_sizes ) {  // Uniform batch sizes for better analysis
             batch_size = STANDARD_BATCH_SIZE;
-        } else {
+        } else {                    // As assigned for faster run time
             batch_size = floor( 512 / ( p * p ) );
         }
 
         // Vector size
         int n = pow ( 2, p );
 
+        // If n is being limited to certain fast-running small values,
+        //  then skip this iteration
         if ( limit_n && n > MAX_N ) {
             continue;
         }
 
+        // First column of the output is the size of the array
         std::cout << n << "\t" << std::flush;
+        fout << n << "\t" << std::flush;
 
         for ( int trial = 0; trial < batch_size; trial++ ) {
             // Create the vector and fill it with random numbers
@@ -190,12 +203,18 @@ void test_sorter( NamedFunction &f, std::vector< int > ps, bool equal_batch_size
             auto end = std::chrono::steady_clock::now();
 
             std::cout
-                << std::chrono::duration< unsigned long long, std::nano>(end - start).count()
+                << std::chrono::duration< unsigned long long, std::nano >(end - start).count()
+                << "\t" << std::flush;
+            fout
+                << std::chrono::duration< unsigned long long, std::nano >(end - start).count()
                 << "\t" << std::flush;
         }
 
         std::cout << std::endl;
+        fout << std::endl;
     }
+
+    fout.close();
 } // end test_sorter
 
 

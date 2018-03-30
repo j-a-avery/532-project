@@ -1,0 +1,7 @@
+src/results.txt
+src/insertionsort.txt
+src/mergesort.txt
+.vscode/settings.json
+src/all
+src/old/*
+src/.ipynb_checkpoints/*
