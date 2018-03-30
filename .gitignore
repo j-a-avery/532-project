@@ -5,3 +5,4 @@ src/mergesort.txt
 src/all
 src/old/*
 src/.ipynb_checkpoints/*
+./vscode/*
