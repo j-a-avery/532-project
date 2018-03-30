@@ -45,7 +45,6 @@
 #include <chrono>
 #include <string>
 #include <functional>
-#include <thread>
 
 
 /* 
@@ -61,6 +60,12 @@ STANDARD_BATCH_SIZE is declared as a variable instead of a constexpr in case
     I decide to add a command line option to use a custom batch size.
 */
 int STANDARD_BATCH_SIZE = 16;
+/*
+Arrays of size n = 20 take almost half an hour to run, which is far too long
+    for testing. This limits the size of arrays to those that can be processed
+    quickly.
+*/
+constexpr int MAX_N = 1000000;
 
 
 // Sort a vector in place using insertion sort
@@ -73,12 +78,6 @@ void merge_sort( std::vector< int > & );
 void sort_sub_vector( std::vector< int > &, int, int );
 void merge( std::vector< int > &, int, int, int, int );
 
-
-// Sort a vector in place using a multithreaded merge sort
-void multithreaded_merge_sort( std::vector< int > & );
-// Multithreaded merge sort helper functions
-void multithreaded_sort_sub_vector( std::vector< int > &, int, int );
-//void multithreaded_merge( std::vector< int > &, int, int, int, int ); // Not necessary
 
 
 // Fill an int vector with random ints
@@ -97,7 +96,7 @@ struct NamedFunction {
 
 // Function that allows each different sorting algorithm to be tested and timed
 //  using the same code.
-void test_sorter( NamedFunction &, bool, std::vector< int > );
+void test_sorter( NamedFunction &, std::vector< int >, bool, bool );
 
 
 
@@ -110,13 +109,12 @@ int main(int argc, char **argv) {
     // Changing these through command line options results in more interesting tests.
     bool run_insertion_sort = true;
     bool run_merge_sort = true;
-    bool run_multithreaded_merge_sort = false;  // currently unimplemented
-    bool run_cuda_merge_sort = false;           // currently unimplemented
+    bool limit_n = false;
     
     // p determines both the array size and the number of tests per array
     // Arrays of size 2^p will be tested either floor(512/(p*p)) times or 32 times
     // Having a vector of ps will make things easier later
-    std::vector< int > ps { 4, 8, 12, 16/*  , 20 */  };
+    std::vector< int > ps { 4, 8, 12, 16, 20  };
 
     // Determine the sizes of the test runs.
     // If false, then each vector of size 2^p will be tested floor(512/(p*p)) times
@@ -126,13 +124,10 @@ int main(int argc, char **argv) {
 
     // Adjust run-time flags according to command line arguments
     for ( auto flag : args ) {
-        if ( flag == "+mt" ) { run_multithreaded_merge_sort = true; }
-        if ( flag == "+cuda" ) { run_cuda_merge_sort = true; }
         if ( flag == "-insertion" ) { run_insertion_sort = false; }
         if ( flag == "-merge" ) { run_merge_sort = false; }
-        if ( flag == "-mt" ) { run_multithreaded_merge_sort = false; }
-        if ( flag == "-cuda" ) { run_cuda_merge_sort = false; }
         if ( flag == "equal-batches" ) { equal_batch_sizes = true; }
+        if ( flag == "limit-n" ) { limit_n = true; }
     }
 
     // Create and populate a vector of functions to test
@@ -144,14 +139,11 @@ int main(int argc, char **argv) {
     if ( run_merge_sort ) { 
         sorters.push_back( NamedFunction{ "Merge Sort", merge_sort } ); 
     }
-    if ( run_multithreaded_merge_sort ) {
-        sorters.push_back( NamedFunction{ "Multithreaded Merge Sort", multithreaded_merge_sort } );
-    }
 
     // The heart of the project
     // Test the run-times of each sort function
     for ( auto sorter : sorters ) {
-        test_sorter( sorter, equal_batch_sizes, ps );
+        test_sorter( sorter, ps, equal_batch_sizes, limit_n );
     }
 
     return 0;
@@ -163,7 +155,7 @@ int main(int argc, char **argv) {
 // Given a NamedFunction (a pointer to a function and a string giving it a name),
 //  a boolean to determine whether or not to process equal batch sizes, and a vector
 //  of values for p, calculate the execution time for each of the sort algorithms.
-void test_sorter( NamedFunction &f, bool equal_batch_sizes, std::vector< int > ps ) {
+void test_sorter( NamedFunction &f, std::vector< int > ps, bool equal_batch_sizes, bool limit_n ) {
     
     std::cout << std::endl << f.function_name << std::endl;
 
@@ -181,7 +173,11 @@ void test_sorter( NamedFunction &f, bool equal_batch_sizes, std::vector< int > p
         // Vector size
         int n = pow ( 2, p );
 
-        std::cout << "\"p = " << p << ", n = " << n << "\"\t" << std::flush;
+        if ( limit_n && n > MAX_N ) {
+            continue;
+        }
+
+        std::cout << n << "\t" << std::flush;
 
         for ( int trial = 0; trial < batch_size; trial++ ) {
             // Create the vector and fill it with random numbers
@@ -310,34 +306,3 @@ std::ostream& operator<< ( std::ostream &out, const std::vector< T > &v ) {
     std::copy( v.begin(), v.end(), std::ostream_iterator< T >( out, " ") );
     return out;
 } // end operator<<
-
-
-
-
-
-
-
-
-
-void multithreaded_merge_sort( std::vector< int > &v ) {
-    multithreaded_sort_sub_vector( v, 0, v.size() - 1 );
-}
-
-
-
-void multithreaded_sort_sub_vector( std::vector< int > &v, int low, int high ) {
-    // Test against base case where size of vector is 1
-    if ( ( high - low ) >= 1 ) {    // if NOT base case then
-
-        // Calculate midpoint of the vector,
-        //  and the next element to the right.
-        int mid1 = ( low + high ) / 2;
-        int mid2 = mid1 + 1;
-
-        std::thread left( multithreaded_sort_sub_vector, std::ref(v), low, mid1 );
-        multithreaded_sort_sub_vector( v, mid2, high );
-        left.join();
-
-        merge( v, low, mid1, mid2, high );
-    }
-}
