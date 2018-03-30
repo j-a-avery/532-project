@@ -149,113 +149,6 @@ int main(int argc, char **argv) {
 
 
 
-// Sort a vector in place using insertion sort
-void insertion_sort( std::vector<int> &v ) {
-    // Loop throught the elements of the array
-    for ( int j = 1; j < v.size(); j++ )
-    {
-        int key = v[ j ];   // 
-
-        int i = j - 1;
-        
-        while ( i >= 0 && v[i] > key )
-        {
-            v[i + 1] = v[i];
-            i -= 1;
-        }
-
-        v[ i + 1 ] = key;
-    }
-}
-
-
-
-// Helper function to merge subvectors
-void merge( std::vector<int> &v, int left, int mid1, int mid2, int right ) {
-    int left_index = left;
-    int right_index = mid2;
-    int combined_index = left;
-    std::vector<int> combined( v.size() );
-
-    // Merge subvectors until reaching the end of either
-    while ( left_index <= mid1 && right_index <= right ) {
-        // Place the smaller of the two current elements into result
-        //  and move to next space invector
-        if ( v[ left_index ] <= v[ right_index ] ) {
-            combined[ combined_index++ ] = v[ left_index++ ];
-        } else {
-            combined [ combined_index++ ] = v[ right_index++ ];
-        }
-    }
-
-    if ( left_index == mid2 ) { // if at the end of the left vector
-        while ( right_index <= right ) {    // copy rest of right vector
-            combined[ combined_index++ ] = v[ right_index++ ];
-        }
-    } else {                    // if at the end of the right vector
-        while ( left_index <= mid1 ) {      // copy rest of left vector
-            combined[ combined_index++ ] = v[ left_index++ ];
-        }
-    }
-
-    // Copy values back into the original vector
-    for ( int i = left; i <= right; i++ ) {
-        v[ i ] = combined [ i ];
-    }
-}
-
-
-
-// Helper function to recursively sort sub-vectors
-void sort_sub_vector( std::vector<int> &v, int low, int high ) {
-    // Test against base case where size of vector is 1
-    if ( ( high - low ) >= 1 ) {    // if NOT base case then
-        
-        // Calculate midpoint of the vector,
-        //  and the next element to the right.
-        int mid1 = ( low + high ) / 2;
-        int mid2 = mid1 + 1;
-
-        // Split vector in half and sort each half recursively
-        sort_sub_vector( v, low, mid1 );   // left half
-        sort_sub_vector( v, mid2, high );  // right half
-
-        // Merge the two sorted vectors
-        merge( v, low, mid1, mid2, high );
-    } // end if not base case
-}
-
-
-
-// Sort a vector in place using merge sort
-void merge_sort( std::vector<int> &v ) {
-    sort_sub_vector( v, 0, v.size() - 1 );
-}
-
-
-
-// Fill a vector with random integers
-void random_fill( std::vector<int> &v ) {
-    static std::random_device rd{};
-    static std::mt19937 mt{rd()};
-    static std::uniform_int_distribution<int> dist{1, 1024};
-
-    for ( int i = 0; i < v.size(); i++ ) 
-    {
-        v[i] = dist(mt);
-    }
-}
-
-
-// Overload operator<< for vectors to simplify output of all vector elements
-template <typename T>
-std::ostream& operator<< ( std::ostream &out, const std::vector< T > &v ) {
-    std::copy( v.begin(), v.end(), std::ostream_iterator< T >( out, " ") );
-    return out;
-}
-
-
-
 // The actual meat of the project.
 // Given a NamedFunction (a pointer to a function and a string giving it a name),
 //  a boolean to determine whether or not to process equal batch sizes, and a vector
@@ -297,6 +190,112 @@ void test_sorter( NamedFunction &f, bool equal_batch_sizes, std::vector< int > p
 
         std::cout << std::endl;
     }
+} // end test_sorter
 
 
-}
+
+// Sort a vector in place using insertion sort
+void insertion_sort( std::vector<int> &v ) {
+    // Loop throught the elements of the array
+    for ( int j = 1; j < v.size(); j++ )
+    {
+        int key = v[ j ];   // 
+
+        int i = j - 1;
+        
+        while ( i >= 0 && v[i] > key )
+        {
+            v[i + 1] = v[i];
+            i -= 1;
+        }
+
+        v[ i + 1 ] = key;
+    }
+} // end insertion_sort
+
+
+
+// Sort a vector in place using merge sort
+void merge_sort( std::vector<int> &v ) {
+    sort_sub_vector( v, 0, v.size() - 1 );
+} // end merge_sort
+
+
+
+// Helper function to merge subvectors
+void merge( std::vector<int> &v, int left, int mid1, int mid2, int right ) {
+    int left_index = left;
+    int right_index = mid2;
+    int combined_index = left;
+    std::vector<int> combined( v.size() );
+
+    // Merge subvectors until reaching the end of either
+    while ( left_index <= mid1 && right_index <= right ) {
+        // Place the smaller of the two current elements into result
+        //  and move to next space invector
+        if ( v[ left_index ] <= v[ right_index ] ) {
+            combined[ combined_index++ ] = v[ left_index++ ];
+        } else {
+            combined [ combined_index++ ] = v[ right_index++ ];
+        }
+    }
+
+    if ( left_index == mid2 ) { // if at the end of the left vector
+        while ( right_index <= right ) {    // copy rest of right vector
+            combined[ combined_index++ ] = v[ right_index++ ];
+        }
+    } else {                    // if at the end of the right vector
+        while ( left_index <= mid1 ) {      // copy rest of left vector
+            combined[ combined_index++ ] = v[ left_index++ ];
+        }
+    }
+
+    // Copy values back into the original vector
+    for ( int i = left; i <= right; i++ ) {
+        v[ i ] = combined [ i ];
+    }
+} // end merge
+
+
+
+// Helper function to recursively sort sub-vectors
+void sort_sub_vector( std::vector<int> &v, int low, int high ) {
+    // Test against base case where size of vector is 1
+    if ( ( high - low ) >= 1 ) {    // if NOT base case then
+        
+        // Calculate midpoint of the vector,
+        //  and the next element to the right.
+        int mid1 = ( low + high ) / 2;
+        int mid2 = mid1 + 1;
+
+        // Split vector in half and sort each half recursively
+        sort_sub_vector( v, low, mid1 );   // left half
+        sort_sub_vector( v, mid2, high );  // right half
+
+        // Merge the two sorted vectors
+        merge( v, low, mid1, mid2, high );
+    } // end if not base case
+} // end sort_sub_vector
+
+
+
+// Fill a vector with random integers
+void random_fill( std::vector<int> &v ) {
+    static std::random_device rd{};
+    static std::mt19937 mt{rd()};
+    static std::uniform_int_distribution<int> dist{1, 1024};
+
+    for ( int i = 0; i < v.size(); i++ ) 
+    {
+        v[i] = dist(mt);
+    }
+} // end random_fill
+
+
+
+// Overload operator<< for vectors to simplify output of all vector elements
+template <typename T>
+std::ostream& operator<< ( std::ostream &out, const std::vector< T > &v ) {
+    std::copy( v.begin(), v.end(), std::ostream_iterator< T >( out, " ") );
+    return out;
+} // end operator<<
