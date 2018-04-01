@@ -169,23 +169,20 @@ void test_sorter( NamedFunction &f, std::vector< int > ps, bool equal_batch_size
 
     // Iterate through each of the p values (i.e. p = 4, 8, 12, ...)
     for ( auto p : ps) {
+        // Vector size
+        int n = pow( 2, p );
 
+        // If n is being limited to certain fast-running small values,
+        //  then skip this iteration
+        if ( limit_n && n > MAX_N ) { continue; }
+
+        // Calculate batch size
         int batch_size;
         
-        // Set the batch size
         if ( equal_batch_sizes ) {  // Uniform batch sizes for better analysis
             batch_size = STANDARD_BATCH_SIZE;
         } else {                    // As assigned for faster run time
             batch_size = floor( 512 / ( p * p ) );
-        }
-
-        // Vector size
-        int n = pow ( 2, p );
-
-        // If n is being limited to certain fast-running small values,
-        //  then skip this iteration
-        if ( limit_n && n > MAX_N ) {
-            continue;
         }
 
         // First column of the output is the size of the array
@@ -193,7 +190,7 @@ void test_sorter( NamedFunction &f, std::vector< int > ps, bool equal_batch_size
         fout << n << "\t" << std::flush;
 
         for ( int trial = 0; trial < batch_size; trial++ ) {
-            // Create the vector and fill it with random numbers
+            // Create a vector and fill it with random numbers
             std::vector< int > v( n );
             random_fill( v );
 
