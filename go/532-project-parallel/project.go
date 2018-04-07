@@ -183,6 +183,8 @@ func main() {
 	runInsertionSort := true
 	runMergeSort := true
 	limitN := false
+	demo := false
+	time := true;
 
     // p determines both the array size and the number of tests per array
     // Arrays of size 2^p will be tested either floor(512/(p*p)) times or 32 times
@@ -200,10 +202,14 @@ func main() {
 		if flag == "-merge" { runMergeSort = false; }
 		if flag == "equal-batches" { equalBatchSizes = true; }
 		if flag == "limit-n" { limitN = true; }
+		if flag == "demo" { demo = true; }
+		if flag == "-time" { time = false; }
 	}
 
+	// Create a slice of functions to test, based on command line options
+	//	Default is both Insertion Sort and Merge Sort,
+	//	but these can be stopped by command line options above
 	var sorters []NamedFunction
-
 	if runInsertionSort {
 		sorters = append(sorters, NamedFunction{"Insertion Sort", InsertionSort})
 	}
@@ -211,9 +217,49 @@ func main() {
 		sorters = append(sorters, NamedFunction{"Merge Sort", MergeSort})
 	}
 
-	for _, sorter := range sorters {
-		testSorter(sorter, ps, equalBatchSizes, limitN)
+	// Demonstrate that the sort functions sort correctly (disabled by default)
+	if demo {
+		for _, sorter := range sorters {
+			demoSorter(sorter)
+		}
+	}
+
+	// Time the sort functions, as assigned (enabled by default)
+	if time {
+		for _, sorter := range sorters {
+			testSorter(sorter, ps, equalBatchSizes, limitN)
+		}
 	}
 
 	return
+}
+
+
+
+func head(v []int) {
+	var length int
+
+	if (len(v) > 10) {
+		length = 10
+	} else {
+		length = len(v)
+	}
+
+	for i := 0; i < length; i++ {
+		fmt.Printf("%v ", v[i])
+	}
+	fmt.Println()
+}
+
+
+
+func demoSorter(sorter NamedFunction) {
+	fmt.Printf("\n=====  Demonstrating %v  =====\n", sorter.name)
+	for i := 0; i < 10; i++ {
+		v := make([]int, 10, 10)
+		RandomFill(v)
+		fmt.Printf("\nBefore: %v\n", v)
+		v = sorter.function(v)
+		fmt.Printf("After:  %v\n", v)
+	}
 }

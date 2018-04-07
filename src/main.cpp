@@ -137,7 +137,7 @@ int main(int argc, char **argv) {
 
     if ( run_insertion_sort ) { 
         sorters.push_back( NamedFunction{ "Insertion Sort",  insertion_sort } ); 
-    };
+    }
     if ( run_merge_sort ) { 
         sorters.push_back( NamedFunction{ "Merge Sort", merge_sort } ); 
     }
