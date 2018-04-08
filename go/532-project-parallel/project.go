@@ -32,9 +32,9 @@ func TimeRun(f func([]int) []int, c chan int64, v []int) {
 	defer wg.Done()
 	start := time.Now()
 	f(v)
-	duration := time.Now().Sub(start).Nanoseconds()
+	duration := time.Now().Sub(start)
 	fmt.Printf("%v ", duration)	
-	c <- duration
+	c <- duration.Nanoseconds()
 }
 
 
