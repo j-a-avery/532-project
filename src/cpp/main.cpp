@@ -94,7 +94,7 @@ void insertion_sort( std::vector<int>& );
 // Sort a vector in place using merge sort
 void merge_sort( std::vector<int>& );
 // Merge sort helper functions
-void merge( std::vector<int> &, int, int, int, int );
+void merge( std::vector<int>&, int, int, int, int );
 void sort_sub_vector( std::vector<int>&, int, int );
 
 
