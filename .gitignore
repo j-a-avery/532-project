@@ -6,3 +6,5 @@ src/all
 src/old/*
 src/.ipynb_checkpoints/*
 ./vscode/*
+old/*
+*/.ipynb_checkpoints
