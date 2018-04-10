@@ -266,7 +266,7 @@ func testSorter(f NamedFunction, ps []int, equalBatchSizes, limitN bool) {
 
 		// Calculate batch size
 		batchSize := StandardBatchSize
-		if equalBatchSizes { batchSize = assignedBatchSize( p ) }
+		if !equalBatchSizes { batchSize = assignedBatchSize( p ) }
 
 		// First column of the output is the size of the slice
 		fmt.Printf("\n%v:\n", n)

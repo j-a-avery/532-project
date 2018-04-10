@@ -10,3 +10,4 @@ old/*
 */.ipynb_checkpoints
 *.csv
 *.exe
+*.x
