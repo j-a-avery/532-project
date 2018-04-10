@@ -125,7 +125,7 @@ func main() {
 		if flag == "-merge" { runMergeSort = false; }
 		if flag == "equal-batches" { equalBatchSizes = true; }
 		if flag == "limit-n" { limitN = true; }
-		if flag == "demo" { demo = true; }
+		if flag == "+demo" { demo = true; }
 		if flag == "-time" { time = false; }
 	}
 
@@ -269,7 +269,7 @@ func testSorter(f NamedFunction, ps []int, equalBatchSizes, limitN bool) {
 		if !equalBatchSizes { batchSize = assignedBatchSize( p ) }
 
 		// First column of the output is the size of the slice
-		fmt.Printf("\n%v:\n", n)
+		fmt.Printf("\n%v:\t", n)
 
 		var results []string
 		results = append(results, strconv.Itoa(n))

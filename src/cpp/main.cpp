@@ -147,7 +147,7 @@ int main(int argc, char **argv) {
         if ( flag == "-merge" ) { run_merge_sort = false; }
         if ( flag == "equal-batches" ) { equal_batch_sizes = true; }
         if ( flag == "limit-n" ) { limit_n = true; }
-        if ( flag == "demo" ) { demo = true; }
+        if ( flag == "+demo" ) { demo = true; }
         if ( flag == "-time" ) { time = false; }
     }
 
