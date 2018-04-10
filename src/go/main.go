@@ -121,12 +121,12 @@ func main() {
 
 	// Adjust run-time flags according to command line arguments
 	for _, flag := range args {
-		if flag == "-insertion" { runInsertionSort = false; }
-		if flag == "-merge" { runMergeSort = false; }
+		if flag == "merge-only" { runInsertionSort = false; }
+		if flag == "insertion-only" { runMergeSort = false; }
 		if flag == "equal-batches" { equalBatchSizes = true; }
 		if flag == "limit-n" { limitN = true; }
-		if flag == "+demo" { demo = true; }
-		if flag == "-time" { time = false; }
+		if flag == "demo-sorters" { demo = true; }
+		if flag == "no-time" { time = false; }
 	}
 
 	// Create a slice of functions to test, based on command line options

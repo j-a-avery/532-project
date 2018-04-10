@@ -143,12 +143,12 @@ int main(int argc, char **argv) {
 
     // Adjust run-time flags according to command line arguments
     for ( auto flag : args ) {
-        if ( flag == "-insertion" ) { run_insertion_sort = false; }
-        if ( flag == "-merge" ) { run_merge_sort = false; }
+        if ( flag == "merge-only" ) { run_insertion_sort = false; }
+        if ( flag == "insertion-only" ) { run_merge_sort = false; }
         if ( flag == "equal-batches" ) { equal_batch_sizes = true; }
         if ( flag == "limit-n" ) { limit_n = true; }
-        if ( flag == "+demo" ) { demo = true; }
-        if ( flag == "-time" ) { time = false; }
+        if ( flag == "demo-sorters" ) { demo = true; }
+        if ( flag == "no-time" ) { time = false; }
     }
 
     // Create a vector of functions to test based on command line options
