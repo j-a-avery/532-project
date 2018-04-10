@@ -274,7 +274,7 @@ func testSorter(f NamedFunction, ps []int, equalBatchSizes, limitN bool) {
 		var results []string
 		results = append(results, strconv.Itoa(n))
 
-		ch := make(chan int64, batchSize)
+		ch := make(chan uint64, batchSize)
 
 		for trial := 0; trial < batchSize; trial++ {
 			v := make([]int, n, n)
@@ -288,7 +288,7 @@ func testSorter(f NamedFunction, ps []int, equalBatchSizes, limitN bool) {
 		close(ch)
 		for range ch {
 			duration := <-ch
-			results = append(results, strconv.FormatInt(duration, 10))
+			results = append(results, strconv.FormatUint(duration, 10))
 		}
 
 		fmt.Println()
@@ -305,11 +305,11 @@ func testSorter(f NamedFunction, ps []int, equalBatchSizes, limitN bool) {
 
 // Find the length of time it takes to run a sort,
 //	and push the time (in nanoseconds) to the channel, c
-func TimeRun(f func([]int) []int, c chan int64, v []int) {
+func TimeRun(f func([]int) []int, c chan uint64, v []int) {
 	defer wg.Done()
 	start := time.Now()
 	f(v)
-	duration := time.Now().Sub(start).Nanoseconds()
+	duration := uint64(time.Now().Sub(start).Nanoseconds())
 	fmt.Printf("%v ", duration)	
 	c <- duration
 }
