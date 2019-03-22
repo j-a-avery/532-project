@@ -54,7 +54,7 @@ I have provided Jupyter notebooks that demonstrate the operation of the project,
 A number of command line arguments are provided for various test runs. These work in both the C++ and Golang versions.
 * `insertion-only`: prevents merge sort from being run
 * `merge-only`: prevents insertion sort from being run
-* `equal-batches`: instead of running each sort $\left\lfloor\frac{512}{p^2}\right\rfloor$ times, sorts are run in equal-sized batches.
+* `equal-batches`: instead of running each sort `⌊512/p²⌋` times, sorts are run in equal-sized batches.
 * `limit-n`: only tests small arrays that can be tested quickly
 * `demo-sorters`: demonstrates that each sorting routine produces arrays that are correctly sorted in nondecreasing order
 * `no-time`: skips the main portion of the assignment, the obtaining of run-times
